@@ -1,0 +1,47 @@
+@layer base {
+  :root,
+  [data-theme='light'] {
+    --background: #fcfcfe;
+    --foreground: #0a0a0a;
+    --primary: #f6339b;
+    --primary-foreground: #fcfcfc;
+    --card: #f5f4f4;
+    --border: rgba(9, 9, 11, 0.08);
+    --muted-primary: rgba(240, 92, 196, 0.5);
+    --muted-foreground: #656363;
+    --secondary-button: #f1f5f9;
+    --input: #fcfcfe;
+    --skeleton-base-color: #f1e1eb;
+    --skeleton-highlight-color: #dfc5d2;
+  }
+  
+  [data-theme='dark'] {
+    --background: #0a0a0a;
+    --foreground: #fcfcfe;
+    --primary: #f6339b;
+    --primary-foreground: #fcfcfc;
+    --card: #181622;
+    --border: rgba(248, 250, 252, 0.4);
+    --muted-primary: rgba(240, 92, 191, 0.2);
+    --muted-foreground: #acabab;
+    --secondary-button: #2a272a;
+    --input: #232131;
+    --skeleton-base-color: #423e40;
+    --skeleton-highlight-color: #524048;
+  }
+  @theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-muted-primary: var(--muted-primary);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary-button: var(--secondary-button);
+  --color-input: var(--input);
+  --color-red-500: #ef4444;
+  --color-skeleton-base: var(--skeleton-base-color);
+  --color-skeleton-highlight: var(--skeleton-highlight-color);
+}
+}

@@ -1,33 +1,40 @@
-div#root{
-  display: flex;
-  flex-direction: column ;
-  justify-content: center;
+@import "styles/themes.css";
+@import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+
+  }
 }
 
-.UploadImage{
-  margin: auto;
-  text-align: center;
-  gap: 3px;
-  justify-content: center;
+* {
+  @apply scrollbar-thumb-muted-foreground scrollbar-track-background;
+  scrollbar-width: thin;
 }
 
-.imgs-container{
-  max-width: 900px;
-  margin: 2rem auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem,1fr));
-  gap: 1rem;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:autofill {
+  -webkit-text-fill-color: var(--foreground);
+  box-shadow: 0 0 0 1000px var(--input) inset;
 }
-
-.imgs{
-  width: 100%;
-  max-height: fit-content;
-
+.lucide-eye, .lucide-eye-closed{
+  width: 15px;
+  height: 15px;
 }
-
-.imgs img{
-  width: 100%;
-  border-radius: 5px;
-  box-shadow: 1px 1px 3px 1px #00000024;
-  cursor: pointer;
+#no-padding{
+  padding: 0;
 }

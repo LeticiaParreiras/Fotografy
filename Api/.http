@@ -1,0 +1,22 @@
+###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "username": "letyxa",
+    "name": "leticia",
+    "email": "leticia@gmail.com",
+    "password": "senha"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "leticia@gmail.com",
+    "password": "senha"
+}
+###
+GET http://localhost:3000/user/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VFbWFpbCI6ImxldGljaWFAZ21haWwuY29tIiwic3ViIjoiNmEwZDAwMDU3YTVhNTE0NzQ3NDVhODBhIiwiaWF0IjoxNzgyNDgzMTUxLCJleHAiOjE3ODI0ODY3NTF9.Vx-4RYSGMzqLSgoyQSiaxUVxkg80bpaWvSVmW4JA6uw
