@@ -1,4 +1,19 @@
-import { Controller, Post, Get, Delete, Param, Body, UseGuards, HttpCode, HttpStatus, UploadedFile, UseInterceptors,  MaxFileSizeValidator, ParseFilePipe, Query} from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  UploadedFile,
+  UseInterceptors,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  Query,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -41,19 +56,46 @@ export class PostsController {
 
   @Get()
   @UseGuards(OptionalJwtAuthGuard)
-  async getAllRecentPosts(@CurrentUser() currentUser?: CurrentUserDto, @Query('page') page = 1, @Query('limit') limit = 10,
+  async getAllRecentPosts(
+    @CurrentUser() currentUser?: CurrentUserDto,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
   ) {
-    const posts = await this.postsService.getAllPosts(currentUser, Number(page), Number(limit));
-    if (!posts) return { mensage: 'No posts found' };
-    return posts
+    return await this.postsService.getAllPosts(
+      currentUser,
+      Number(page),
+      Number(limit),
+    );
+
+  }
+  @Get('popular')
+  @UseGuards(OptionalJwtAuthGuard)
+  async getPopularPost(
+    @CurrentUser() currentUser?: CurrentUserDto,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return await this.postsService.getMostFamousPosts(
+      currentUser,
+      Number(page),
+      Number(limit),
+    );
+
   }
 
   @Get('Ifollow')
   @UseGuards(JwtAuthGuard)
-  async getPostIFollow(@CurrentUser() currentUser: CurrentUserDto, @Query('page') page = 1, @Query('limit') limit = 10,){
-    const posts = await this.postsService.getPostsIFollow(currentUser, Number(page), Number(limit))
-    if (!posts) return { mensage: 'No posts found' };
-    return posts
+  async getPostIFollow(
+    @CurrentUser() currentUser: CurrentUserDto,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return await this.postsService.getPostsIFollow(
+      currentUser,
+      Number(page),
+      Number(limit),
+    );
+    
   }
 
   @Get('user/:username')
@@ -63,18 +105,28 @@ export class PostsController {
     if (!posts) return { mensage: 'No posts found' };
     return posts
   }
-  
+
   @Get('iLiked')
   @UseGuards(JwtAuthGuard)
-  async getMyLikes(@CurrentUser() user: CurrentUserDto, @Query('page') page = 1, @Query('limit') limit = 10,){
-    const posts = await this.postsService.postILike(user, Number(page), Number(limit))
-    if (!posts) return {message: "You didn't like any post"}
-    return posts
+  async getMyLikes(
+    @CurrentUser() user: CurrentUserDto,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return await this.postsService.postILike(
+      user,
+      Number(page),
+      Number(limit),
+    );
+   
   }
 
   @Get(':id')
   @UseGuards(OptionalJwtAuthGuard)
-  async getPostById(@Param('id') id: string, @CurrentUser() CurrentUser?: CurrentUserDto): Promise<PostResponseDto> {
+  async getPostById(
+    @Param('id') id: string,
+    @CurrentUser() CurrentUser?: CurrentUserDto,
+  ): Promise<PostResponseDto> {
     return await this.postsService.getPostById(id, CurrentUser);
   }
   @Post('like/:id')
@@ -82,13 +134,12 @@ export class PostsController {
   async likePost(
     @Param('id') postId: string,
     @CurrentUser() user: CurrentUserDto,
-
   ) {
     const posts = await this.postsService.likePost(postId, user);
-    if (posts){
+    if (posts) {
       return { message: 'post liked sucess' };
     }
-    return {code: 304 }
+    return { code: 304 };
   }
 
   @Delete('like/:id')
@@ -96,9 +147,9 @@ export class PostsController {
   async unlikePost(
     @Param('id') postId: string,
     @CurrentUser() user: CurrentUserDto,
-  ){
+  ) {
     const posts = await this.postsService.unlikePost(postId, user);
-    if (posts){
+    if (posts) {
       return { message: 'post unliked sucess' };
     }
     return { code: 304 };

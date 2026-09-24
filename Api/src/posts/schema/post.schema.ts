@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, HydratedDocument, Types } from 'mongoose';
 import { User } from 'src/user/schema/user.schema';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import * as mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import { Image } from 'src/images/schema/image.schema';
-
 @Schema({ timestamps: true })
 export class Post extends Document {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Image', required: true })
@@ -33,4 +33,6 @@ export class Post extends Document {
 
 export const PostSchema = SchemaFactory.createForClass(Post);
 export type PostDocument = HydratedDocument<Post>;
+
 PostSchema.plugin(mongoosePaginate);
+PostSchema.plugin(mongooseAggregatePaginate);

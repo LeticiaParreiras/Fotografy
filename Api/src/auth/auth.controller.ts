@@ -50,7 +50,7 @@ export class AuthController {
   async forgotPassword(@Body() forgotPasswordBody: ForgotPasswordDto) {
     await this.authService.forgotPassword(forgotPasswordBody);
   }
-  @Get('forgot-password/verify')
+  @Post('forgot-password/verify')
   async verifyTokenFogotPassword(
     @Body() VerifyTokenResetPasswordBody: VerifyTokenResetPasswordDto,
   ) {
