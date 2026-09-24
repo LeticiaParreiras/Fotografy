@@ -3,8 +3,8 @@ import { AuthContext } from './AuthContext';
 import { axiosClient } from '../../lib/axios';
 import { useLocation } from 'react-router-dom';
 
-
-
+// Url que o não precisa do provider
+const UrlNoProvider = ['/login', '/register', '/forgot-password']
 
 export const AuthProvider = ({ children }:PropsWithChildren) => {
   const [username, setUsername] = useState<string | null>(null);
@@ -30,7 +30,8 @@ export const AuthProvider = ({ children }:PropsWithChildren) => {
         localStorage.removeItem('username');
       }
     };
-   if(location == '/login' || location == '/register'){
+    // se a location estive dentro do array não não tenta carregar username
+   if(UrlNoProvider.includes(location)){
     return
    }
 

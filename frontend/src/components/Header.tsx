@@ -9,7 +9,7 @@ export function Header({ title }:Props) {
   const navigate = useNavigate();
   return (
     <div className="flex gap-4 border-border border-be p-4 items-center ">
-      <Button variant="ghost" icon={ArrowLeft} onClick={() => navigate(-1)} />
+      <Button variant="ghost" icon={ArrowLeft} aria-label="Voltar" onClick={() => navigate(-1)} />
       <p className=" font-semibold text-foreground">{title}</p>
     </div>
   );

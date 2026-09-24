@@ -2,20 +2,17 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ImagePlus } from 'lucide-react';
 import { ModalShell } from '../components/TemplateModal';
 import { createPostSchema, type CreatePostFormValues } from '../lib/postSchemas';
 import { Button } from '../shared/Button';
-import { createPost } from '../hooks/postMutation';
-
-
+import {  useCreatePost } from '../hooks/postMutation';
  
   // <Button onClick={() => NiceModal.show(CreatePostModal)}>Novo post</Button>
 
 export const CreatePostModal = NiceModal.create(() => {
   const modal = useModal(); // controla visibilidade/resultado deste modal específico
-  const queryClient = useQueryClient();
+  const mutation = useCreatePost();
   const [preview, setPreview] = useState<string | null>(null);
 
   const {
@@ -27,15 +24,6 @@ export const CreatePostModal = NiceModal.create(() => {
     resolver: zodResolver(createPostSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: createPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
-      modal.resolve(); // resolve a Promise retornada por NiceModal.show(...)
-      modal.hide();
-    },
-  });
-
   const imageFiles = watch('image');
 
   function handleImageChange(files: FileList | null) {
@@ -44,9 +32,14 @@ export const CreatePostModal = NiceModal.create(() => {
     }
   }
 
-  const onSubmit = (data: CreatePostFormValues) => {
-    mutation.mutate(data);
-  };
+ const onSubmit = (data: CreatePostFormValues) => {
+  mutation.mutate(data, {
+    onSuccess: () => {
+      modal.resolve();
+      modal.hide();
+    },
+  });
+};
 
   return (
     <ModalShell

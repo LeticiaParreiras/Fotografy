@@ -1,21 +1,23 @@
 import type { Post } from "../lib/postInterfaces";
-import { Heart, MessageCircle } from "lucide-react";
+import { Download, Heart, MessageCircle, Share2, Trash2 } from "lucide-react";
 import { Button } from "../shared/Button";
 import { Link } from "react-router-dom";
+import MoreOptionsMenu from "../shared/MoreOptionsMenu";
 
 interface PostProps {
   post: Post;
   onToggleLike?: (postId: string, liked: boolean) => void;
+  onDelete?: (postId: string,) => void;
 }
 
-export default function Post({ post, onToggleLike }: PostProps) {
+export default function Post({ post, onToggleLike, onDelete }: PostProps) {
       const formatDate = new Intl.DateTimeFormat("pt-BR", {
         day: "2-digit",
     month: "long",
     year: "numeric",
   }).format(new Date(post.createdAt));
     return(
-        <article  className="mb-4 overflow-hidden rounded-xl border border-border bg-card">
+        <article  className="mb-4 w-full min-w-0 overflow-hidden rounded-xl border border-border bg-card">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-muted-primary  text-xs font-semibold text-primary-foreground">
@@ -29,17 +31,20 @@ export default function Post({ post, onToggleLike }: PostProps) {
             {formatDate}
           </p>
         </div>
-        {post.myPost && (
-          <span className="ml-auto rounded-full border border-primary bg-primary p-2 text-[10px] uppercase tracking-wide text-primary-foreground">
-            Você
-          </span>
-        )}
+        
+        <div className="ml-auto">
+          <MoreOptionsMenu>
+            <Button variant="ghost" disabled={true} icon={Download}>Baixar Imagem</Button>
+            <Button variant="ghost" disabled={true} icon={Share2}>Compartilhar</Button>
+            {post.myPost&& <Button onClick={()=>onDelete?.(post.id)}icon={Trash2} variant="ghost">Apagar</Button>}
+          </MoreOptionsMenu>
+        </div>
       </div>
  
       {/* Imagem */}
-      <div className="bg-neutral-950 max-h-[600px] max-w-[600px]">
+      <div className="w-full max-w-[600px] overflow-hidden bg-card">
         <img
-          className=" w-full object-cover"
+          className="block h-auto max-h-[600px] w-full max-w-full object-contain"
           src={post.imageUrl}
           alt={post.text || `Post de @${post.username}`}
           loading="lazy"

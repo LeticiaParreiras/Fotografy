@@ -21,13 +21,37 @@ export function usePostToggleLike() {
     },
   });
 }
-export async function createPost(data: CreatePostFormValues): Promise<void> {
+async function createPost(data: CreatePostFormValues): Promise<void> {
   const formData = new FormData();
   formData.append('image', data.image[0]);
   formData.append('text', data.text?? "");
 
   await axiosClient.post('/post', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}
+export function useCreatePost() {
+  const queryClient = useQueryClient();
+ 
+  return useMutation({
+    mutationFn: (data: CreatePostFormValues) => createPost(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+}
+
+ async function deletePost(idPost:string) {
+  await axiosClient.delete(`/post/${idPost}`)
+}
+export function useDeletePost(){
+  const queryClient = useQueryClient();
+ 
+  return useMutation({
+    mutationFn: (idPost:string) => deletePost(idPost),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
   });
 }
 

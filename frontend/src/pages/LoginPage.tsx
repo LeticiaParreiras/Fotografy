@@ -8,6 +8,7 @@ import { useLogin } from '../hooks/AuthMutation';
 import { Input } from '../shared/Input';
 import { Button } from '../shared/Button';
 import { AuthContext } from '../context/Auth/AuthContext';
+import { PasswordInput } from '../components/PasswordInput';
 
 
 export function LoginPage() {
@@ -61,8 +62,7 @@ export function LoginPage() {
         </div>
 
         <div>
-          <Input
-            type="password"
+          <PasswordInput
             autoComplete="current-password"
             label='Senha'
             error={errors.password?.message}

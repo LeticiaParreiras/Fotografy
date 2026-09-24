@@ -1,7 +1,6 @@
 import { Calendar } from "lucide-react";
 import type { userResponse } from "../hooks/useUser";
 import { Button } from "../shared/Button";
-import { useFollow } from "../hooks/FollowMutation";
 interface Props{
     user: userResponse,
     isOwnPage: boolean,
@@ -10,7 +9,6 @@ interface Props{
 }
 export function UserInformation({ user, isOwnPage, onFollow }: Props,) {
   const { name, username, biography, createdAt } = user;
-  const {} = useFollow()
   const formatDate = new Intl.DateTimeFormat("pt-BR", {
     month: "long",
     year: "numeric",
@@ -18,15 +16,15 @@ export function UserInformation({ user, isOwnPage, onFollow }: Props,) {
 
 
   return (
-    <div className="flex gap-4 w-full p-4">
-      <div>
-        <div className="icon rounded-full w-20 h-20 bg-primary"></div>
+    <div className="flex w-full min-w-0 flex-col gap-4 p-4 sm:flex-row">
+      <div className="shrink-0">
+        <div className="icon h-20 w-20 rounded-full bg-primary"></div>
       </div>
-      <div className="w-md">
-        <h2 className="text-lg font-semibold text-foreground">{name}</h2>
+      <div className="min-w-0 flex-1">
+        <h2 className="break-words text-lg font-semibold text-foreground">{name}</h2>
         <p className="font-mono text-sm text-muted-foreground">@{username}</p>
         {biography && (
-          <p className="mt-3 text-sm leading-relaxed text-foreground tab-1">
+            <p className="mt-3 break-words text-sm leading-relaxed text-foreground tab-1">
             {biography}
           </p>
         )}
@@ -38,7 +36,7 @@ export function UserInformation({ user, isOwnPage, onFollow }: Props,) {
           {isOwnPage ? (
             <Button variant="primary" disabled={true}>Editar perfil</Button>
           ) : (
-            <Button variant="primary" onClick={()=>onFollow(user.username, user.followed??false)}>{user.followed? 'Deixar de seguir': 'Seguir'}</Button>
+            <Button variant="primary" onClick={()=>onFollow?.(user.username, user.followed??false)}>{user.followed? 'Deixar de seguir': 'Seguir'}</Button>
           )}
         </div>
       </div>

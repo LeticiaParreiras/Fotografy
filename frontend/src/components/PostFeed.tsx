@@ -1,11 +1,13 @@
 
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { usePosts } from "../hooks/usePost";
 import Post from "./PostCard";
-import { usePostToggleLike } from "../hooks/postMutation";
+import { useDeletePost, usePostToggleLike } from "../hooks/postMutation";
+import NiceModal from "@ebay/nice-modal-react";
+import { confirmationModal } from "../shared/confirmationModal";
 
 interface PostFeedProps {
-  type: "recent" | "following" | "user";
+  type: "popular" | "following" | "user";
   username?: string;
   emptyMessage?: string;
 }
@@ -18,9 +20,16 @@ export default function PostFeed({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePosts({ type, username });
   const toggleLike = usePostToggleLike();
-  const posts = data?.pages.flatMap((p) => p.posts) ?? [];
+  const deletePostMutation = useDeletePost();
+  const posts = data?.pages.flatMap((page) => page?.posts ?? []) ?? [];
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   
+  async function onDelete(postId: string) {
+    const confirmed = await NiceModal.show(confirmationModal,{ title: 'Apagar post', message: 'Você tem certeza que quer apagar o post?'})
+    if (confirmed){
+      deletePostMutation.mutate(postId)
+    }
+  }
 
   useEffect(() => {
     if (!sentinelRef.current || !hasNextPage) return;
@@ -45,13 +54,13 @@ export default function PostFeed({
   }
 
   return (
-    <div className="overflow-y-auto
- p-4 m-auto">
+    <div className="m-auto w-full min-w-0 overflow-y-auto p-4">
       {posts.map((post) => (
         <Post
           post={post}
           key={post.id}
           onToggleLike={(postId, liked) => toggleLike.mutate({ postId, liked })}
+          onDelete={(postId) => onDelete(postId)}
         />
       ))}
       <div ref={sentinelRef} />
